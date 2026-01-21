@@ -7,10 +7,12 @@ Running on Jenkins in /var/lib/jenkins/workspace/aws-jenkins
 WARNING: Unknown parameter(s) found for class type 'com.cloudbees.jenkins.plugins.awscredentials.AmazonWebServicesCredentialsBinding': keyIdVariable,secretVariable
 Masking supported pattern matches of $AWS_ACCESS_KEY_ID or $AWS_SECRET_ACCESS_KEY
 [Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
 [Pipeline] stage
 [Pipeline] { (describe instances)
 [Pipeline] sh
-+ aws ec2 describe-instances
++ aws ec2 describe-instances --region us-east-2
 {
     "Reservations": [
         {
@@ -499,21 +501,26 @@ Masking supported pattern matches of $AWS_ACCESS_KEY_ID or $AWS_SECRET_ACCESS_KE
 [Pipeline] script
 [Pipeline] {
 [Pipeline] sh
-+ aws ec2 describe-instances --region us-east-2 --filters 'Name=tag:Name,Values=Jenkins*' --query 'Reservations[*].Instances[*].[InstanceId]' --output text
++ aws ec2 describe-instances --region us-east-2 --filters 'Name=tag:Name,Values=CI-CD Jenkins' Name=instance-state-name,Values=running --query 'Reservations[].Instances[].InstanceId' --output text
 [Pipeline] echo
-
+✅ InstanceId = i-09bce84f24c27ff4b
 [Pipeline] sh
-+ aws ec2 describe-instances --region us-east-2 --instance-ids '' --query 'Reservations[*].Instances[*].BlockDeviceMappings[0].Ebs.VolumeId' --output text
-
-An error occurred (MissingParameter) when calling the DescribeInstances operation: The request must contain the parameter InstanceId
++ aws ec2 describe-instances --region us-east-2 --instance-ids i-09bce84f24c27ff4b --query 'Reservations[].Instances[].BlockDeviceMappings[0].Ebs.VolumeId' --output text
+[Pipeline] echo
+✅ VolumeId = vol-0171be22e7ede4766
+[Pipeline] sh
++ aws ec2 create-snapshot --region us-east-2 --volume-id vol-0171be22e7ede4766 --description 'Snapshot created from Jenkins build 2' --query SnapshotId --output text
+[Pipeline] echo
+✅ SnapshotId = snap-0adab813ac8dd36f2
 [Pipeline] }
 [Pipeline] // script
 [Pipeline] }
 [Pipeline] // stage
 [Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
 [Pipeline] // withCredentials
 [Pipeline] }
 [Pipeline] // node
 [Pipeline] End of Pipeline
-ERROR: script returned exit code 254
-Finished: FAILURE
+Finished: SUCCESS
