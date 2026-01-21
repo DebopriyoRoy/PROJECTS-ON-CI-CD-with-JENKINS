@@ -9,7 +9,7 @@ pipeline{
     stages{
         stage('Checkout stage'){
             steps{
-                checkout scmGit(branches: [[name: '*/war-package-migration-overSSH']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/DebopriyoRoy/PROJECTS-ON-CI-CD-with-JENKINS.git']])
+                checkout scmGit(branches: [[name: '*/docker_first']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/DebopriyoRoy/PROJECTS-ON-CI-CD-with-JENKINS.git']])
             }
         }
         stage('Maven Build'){
