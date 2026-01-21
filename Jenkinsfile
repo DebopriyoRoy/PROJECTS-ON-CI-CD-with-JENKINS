@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-    cred = credentials('aws-cred')
+    cred = credentials('aws-cred') //Differs for every user// *** It will be availbe in Manage Jenkins ---> Under credentials tab
     AWS_REGION = "us-east-2"
   }
 
