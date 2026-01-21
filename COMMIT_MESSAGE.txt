@@ -1,0 +1,1 @@
+Add Jenkins pipeline for Maven build + Docker build + AWS ECR push
